@@ -1,0 +1,22 @@
+# 配置服务器端口
+server:
+  port: 8000
+
+# Spring应用配置
+spring:
+  # 应用名称
+  application:
+    name: gateway
+  # Gateway路由配置
+  cloud:
+    gateway:
+      # 路由列表
+      routes:
+        # 路由ID，用于唯一标识一个路由
+        - id: member
+          # 目标服务的URI
+          uri: http://127.0.0.1:8001
+          # 路由断言，定义了请求如何匹配此路由的条件
+          predicates:
+            # Path断言，匹配以/member/开头的所有路径
+            - Path=/member/**

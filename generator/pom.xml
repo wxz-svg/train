@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 定义项目元数据，并指定POM的格式版本 -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 父项目的定义，用于继承配置 -->
+    <parent>
+        <groupId>com.wxz</groupId>
+        <artifactId>train</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- 项目唯一标识符 -->
+    <artifactId>generator</artifactId>
+
+    <!-- 项目属性配置，如编译版本和编码格式 -->
+    <properties>
+        <maven.compiler.source>20</maven.compiler.source>
+        <maven.compiler.target>20</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- 项目构建配置 -->
+    <build>
+        <!-- 配置插件，以支持MyBatis Generator自动代码生成 -->
+        <plugins>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <!-- 配置插件的详细设置，包括配置文件位置，是否覆盖已有文件，以及输出详细信息等 -->
+                <configuration>
+                    <configurationFile>src/main/resources/generator-config-member.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <!-- 配置插件依赖的外部库，例如这里配置了MySQL连接驱动 -->
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.22</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
