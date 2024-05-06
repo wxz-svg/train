@@ -3,6 +3,7 @@ package com.wxz.train.member.service;
 import cn.hutool.core.collection.CollUtil;
 import com.wxz.train.common.enums.BusinessExceptionEnum;
 import com.wxz.train.common.exception.BusinessException;
+import com.wxz.train.common.utils.SnowUtils;
 import com.wxz.train.member.domain.Member;
 import com.wxz.train.member.domain.MemberExample;
 import com.wxz.train.member.mapper.MemberMapper;
@@ -39,7 +40,7 @@ public class MemberService {
 
         // 创建新的会员对象，并设置相关信息
         Member member = new Member();
-        member.setId(System.currentTimeMillis());
+        member.setId(SnowUtils.getSnowflakeNextId());
         member.setMobile(req.getMobile());
 
         // 将新会员信息插入数据库
