@@ -6,3 +6,15 @@ GET http://localhost:8000/member/member/count
 Accept: application/json
 
 ###
+POST http://localhost:8000/member/member/register
+Content-Type: application/x-www-form-urlencoded
+
+mobile = 16672338780
+
+###
+POST http://localhost:8000/member/member/register
+Content-Type: application/x-www-form-urlencoded
+
+mobile = 4723387999
+
+###
