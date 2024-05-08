@@ -13,6 +13,7 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css'; // 引入Ant Design Vue的样式文件
 import * as Icons from '@ant-design/icons-vue';
 import axios from "axios";
+import { notification} from "ant-design-vue";
 
 // 创建Vue应用实例
 const app = createApp(App)
@@ -53,4 +54,46 @@ axios.interceptors.response.use(function (response) {
 axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 console.log('环境：', process.env.NODE_ENV);
 console.log('服务端：', process.env.VUE_APP_SERVER);
+
+/**
+ * 设置axios请求和响应拦截器
+ *
+ * 请求拦截器部分:
+ * 1. 打印请求参数
+ * 2. 如果存在用户token，将其添加到请求头中
+ *
+ * 响应拦截器部分:
+ * 1. 打印返回的结果
+ * 2. 处理错误响应，特别是401状态码，对应未登录或登录超时情况，此时重置用户状态，显示错误通知，并跳转到登录页
+ *
+ * @returns {void} 无返回值
+ */
+axios.interceptors.request.use(function (config) {
+    console.log('请求参数：', config);
+    const _token = store.state.member.token;
+    if (_token) {
+        config.headers.token = _token;
+        console.log("请求headers增加token:", _token);
+    }
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+axios.interceptors.response.use(function (response) {
+    console.log('返回结果：', response);
+    return response;
+}, error => {
+    console.log('返回错误：', error);
+    const response = error.response;
+    const status = response.status;
+    if (status === 401) {
+        // 判断状态码是401 跳转到登录页
+        +console.log("未登录或登录超时，跳到登录页");
+        store.commit("setMember", {});
+        notification.error({description: "未登录或登录超时"});
+        router.push('/login');
+    }
+    return Promise.reject(error);
+});
+
 

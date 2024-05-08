@@ -1,4 +1,3 @@
-template
 <template>
   <!-- 登录页面布局 -->
   <a-row class="login">
@@ -53,6 +52,7 @@ import { defineComponent, reactive } from 'vue';
 import axios from "axios";
 import { notification } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
+import store from "@/store";
 
 
 // 定义一个登录组件
@@ -111,7 +111,10 @@ export default defineComponent({
         if (data.success) {
           notification.success({description: '登陆成功!'});
           // console.log('登陆成功', data.content);
-          router.push('/')
+          // 登录成功，跳转的控台页面
+          router.push('/');
+          // store保存登录信息
+          store.commit("setMember", data.content);
         }else {
           notification.error({ description: data.message });
         }

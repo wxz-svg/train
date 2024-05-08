@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.wxz.train.common.enums.BusinessExceptionEnum;
 import com.wxz.train.common.exception.BusinessException;
+import com.wxz.train.common.utils.JwtUtils;
 import com.wxz.train.common.utils.SnowUtils;
 import com.wxz.train.member.domain.Member;
 import com.wxz.train.member.domain.MemberExample;
@@ -104,13 +105,13 @@ public class MemberService {
      * 根据提供的手机号和验证码对会员进行登录验证。
      *
      * @param req 包含会员手机号和验证码的请求对象。
-     * @return 返回登录成功的会员信息响应对象。
+     * @return 返回登录成功的会员信息响应对象，包含会员基本信息和登录token。
      * @throws BusinessException 如果会员不存在或验证码错误，则抛出业务异常。
      */
     public MemberLoginResp login(MemberLoginReq req) {
         String mobile = req.getMobile();
         String code = req.getCode();
-        Member memberDB = selectByMobile(mobile);
+        Member memberDB = selectByMobile(mobile); // 通过手机号查询数据库中的会员信息
 
         // 校验会员是否存在
         if (ObjectUtil.isNull(memberDB)) {
@@ -118,12 +119,16 @@ public class MemberService {
         }
 
         // 校验验证码是否正确
-        if (!"8888".equals(code)) {
+        if (!"8888".equals(code)) { // 这里硬编码了验证码为"8888"，实际应用中应从配置中获取
             throw new BusinessException(BusinessExceptionEnum.MEMBER_MOBILE_CODE_ERROR);
         }
 
-        // 返回登录成功的会员信息
-        return BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        // 复制会员信息到响应对象
+        MemberLoginResp memberLoginResp = BeanUtil.copyProperties(memberDB, MemberLoginResp.class);
+        // 生成JWT Token
+        String token = JwtUtils.createToken(memberLoginResp.getId(), memberLoginResp.getMobile());
+        memberLoginResp.setToken(token); // 将生成的token设置到响应对象中
+        return memberLoginResp;
     }
 
     /**

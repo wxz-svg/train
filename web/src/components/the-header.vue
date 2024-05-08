@@ -3,6 +3,13 @@
   <a-layout-header class="header">
     <div class="logo" />
     <!-- 水平导航菜单，采用深色主题，模式为水平，行高设置为64px -->
+    <div class="logo" />
+    <div style="float: right; color: white">
+      您好: {{member.mobile}} &nbsp;&nbsp;
+      <router-link to="/login">
+        退出登录
+      </router-link>
+    </div>
     <a-menu
         v-model:selectedKeys="selectedKeys1"
         theme="dark"
@@ -18,19 +25,22 @@
 
 <script>
 import {defineComponent, ref} from 'vue';
-
+import store from "@/store";
 /**
  * TheHeaderView 组件定义。
  * 此组件表示一个带有导航菜单的头部布局。
+ *
+ * @returns 返回组件实例。
  */
 export default defineComponent({
   name: "the-header-view",
   setup() {
-
+    let member = store.state.member;
     // 初始化并返回菜单选中项的键值。
     // 组件加载时，默认选中键值为 '2'。
     return {
       selectedKeys1: ref(['2']),
+      member
     };
   },
 });
