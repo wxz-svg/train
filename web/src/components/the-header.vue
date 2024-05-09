@@ -11,7 +11,7 @@
       </router-link>
     </div>
     <a-menu
-        v-model:selectedKeys="selectedKeys1"
+        v-model:selectedKeys="selectedKeys"
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
@@ -35,8 +35,9 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import {defineComponent, ref, watch} from 'vue';
 import store from "@/store";
+import router from "@/router";
 /**
  * TheHeaderView 组件定义。
  * 此组件表示一个带有导航菜单的头部布局。
@@ -46,11 +47,26 @@ import store from "@/store";
 export default defineComponent({
   name: "the-header-view",
   setup() {
+    // 从store中获取成员信息
     let member = store.state.member;
-    // 初始化并返回菜单选中项的键值。
-    // 组件加载时，默认选中键值为 '2'。
+
+    // 初始化一个ref来保存选中的路径（路由）
+    const selectedKeys = ref([]);
+
+    // 监听当前路由路径的变化，并相应地更新selectedKeys
+    watch(
+        () => router.currentRoute.value.path, // 监视当前路由路径
+        (newValue) => {
+          console.log('watch', newValue); // 打印新的路由路径以供调试
+          selectedKeys.value = []; // 重置selectedKeys数组
+          selectedKeys.value.push(newValue); // 将新的路由路径添加到selectedKeys数组
+        },
+        { immediate: true } // 立即执行监视器，使用当前路由值
+    );
+
     return {
-      member
+      member,
+      selectedKeys
     };
   },
 });
