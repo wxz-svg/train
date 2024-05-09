@@ -32,7 +32,7 @@ public class JwtUtils {
      */
     public static String createToken(Long id, String mobile) {
         DateTime now = DateTime.now();
-        DateTime expTime = now.offsetNew(DateField.SECOND, 10);
+        DateTime expTime = now.offsetNew(DateField.SECOND, 120);
         Map<String, Object> payload = new HashMap<>();
         // 初始化Token负载信息，包括签发时间、过期时间、生效时间和用户ID、手机号
         payload.put(JWTPayload.ISSUED_AT, now);
