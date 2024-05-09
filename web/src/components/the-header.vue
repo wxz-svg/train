@@ -5,8 +5,8 @@
     <!-- 水平导航菜单，采用深色主题，模式为水平，行高设置为64px -->
     <div class="logo" />
     <div style="float: right; color: white">
-      您好: {{member.mobile}} &nbsp;&nbsp;
-      <router-link to="/login">
+      您好: {{member.mobile}} &nbsp;&nbsp;&nbsp;
+      <router-link to="/login" style="color: white">
         退出登录
       </router-link>
     </div>
@@ -16,15 +16,26 @@
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
     >
-      <a-menu-item key="1">导航项1</a-menu-item>
-      <a-menu-item key="2">导航项2</a-menu-item>
-      <a-menu-item key="3">导航项3</a-menu-item>
+      <!--欢迎-->
+      <a-menu-item key="/welcome">
+        <router-link to="/welcome">
+          <CoffeeOutlined /> &nbsp;欢迎
+        </router-link>
+      </a-menu-item>
+
+      <!--乘车人管理-->
+      <a-menu-item key="/passenger">
+        <router-link to="/passenger">
+          <UserOutlined /> &nbsp;乘车人管理
+        </router-link>
+      </a-menu-item>
+
     </a-menu>
   </a-layout-header>
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue';
+import { defineComponent } from 'vue';
 import store from "@/store";
 /**
  * TheHeaderView 组件定义。
@@ -39,7 +50,6 @@ export default defineComponent({
     // 初始化并返回菜单选中项的键值。
     // 组件加载时，默认选中键值为 '2'。
     return {
-      selectedKeys1: ref(['2']),
       member
     };
   },

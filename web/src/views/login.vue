@@ -112,7 +112,7 @@ export default defineComponent({
           notification.success({description: '登陆成功!'});
           // console.log('登陆成功', data.content);
           // 登录成功，跳转的控台页面
-          router.push('/');
+          router.push('/welcome');
           // store保存登录信息
           store.commit("setMember", data.content);
         }else {
