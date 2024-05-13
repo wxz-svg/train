@@ -1,8 +1,12 @@
 <template>
   <p>
-    <a-button type="primary" @click="showModal">新增</a-button>
+    <a-space>
+      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <a-button type="primary" @click="showModal">新增</a-button>
+    </a-space>
   </p>
-  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination"/>
+
+  <a-table :dataSource="passengers" :columns="columns" :pagination="pagination" @change="handleTableChange"/>
   <a-modal v-model:visible="visible" title="乘车人" @ok="handleOk"
            ok-text="确认" cancel-text="取消">
     <a-form :model="passenger" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
@@ -22,13 +26,14 @@
     </a-form>
   </a-modal>
 </template>
+
 <script>
 import { defineComponent, ref, reactive, onMounted } from 'vue';
 import {notification} from "ant-design-vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: 'Passenger-View',
+  name: "Passenger-View",
   setup() {
     const visible = ref(false);
     const passenger = reactive({
@@ -78,6 +83,12 @@ export default defineComponent({
     };
 
     const handleQuery = (param) => {
+      if (!param) {
+        param = {
+          page: 1,
+          size: pagination.pageSize
+        };
+      }
       axios.get("/member/passenger/query-list", {
         params: {
           page: param.page,
@@ -87,6 +98,8 @@ export default defineComponent({
         let data = response.data;
         if (data.success) {
           passengers.value = data.content.list;
+          // 设置分页控件的值
+          pagination.current = param.page;
           pagination.total = data.content.total;
         } else {
           notification.error({description: data.message});
@@ -94,10 +107,18 @@ export default defineComponent({
       });
     };
 
+    const handleTableChange = (pagination) => {
+      // console.log("看看自带的分页参数都有啥：" + pagination);
+      handleQuery({
+        page: pagination.current,
+        size: pagination.pageSize
+      });
+    };
+
     onMounted(() => {
       handleQuery({
         page: 1,
-        size: 2
+        size: pagination.pageSize
       });
     });
 
@@ -108,7 +129,9 @@ export default defineComponent({
       handleOk,
       passengers,
       pagination,
-      columns
+      columns,
+      handleTableChange,
+      handleQuery
     };
   },
 });
