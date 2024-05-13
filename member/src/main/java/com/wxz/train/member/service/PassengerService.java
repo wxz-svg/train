@@ -37,13 +37,23 @@ public class PassengerService {
     public void save(PassengerSaveReq req){
         DateTime now = DateTime.now(); // 获取当前时间
         Passenger passenger = BeanUtil.copyProperties(req,Passenger.class); // 将请求对象的属性复制到Passenger实体中
-        // 为乘客生成唯一的会员ID和乘客ID
-        passenger.setMemberId(LoginMemberContext.getId());
-        passenger.setId(SnowUtils.getSnowflakeNextId()); // 生成唯一的乘客ID
-        passenger.setCreateTime(now); // 设置创建时间
-        passenger.setUpdateTime(now); // 设置更新时间
-        passengerMapper.insert(passenger); // 将乘客信息插入数据库
+
+        // 检查乘客信息是否已存在，如果存在则更新，否则插入新记录
+        if (ObjectUtil.isNull(passenger.getMemberId())){
+            // 为新乘客生成会员ID和乘客ID，并设置创建和更新时间
+            passenger.setMemberId(LoginMemberContext.getId());
+            passenger.setId(SnowUtils.getSnowflakeNextId()); // 生成唯一的乘客ID
+            passenger.setCreateTime(now); // 设置创建时间
+            passenger.setUpdateTime(now); // 设置更新时间
+            passengerMapper.insert(passenger); // 将新乘客信息插入数据库
+        }else {
+            // 对已存在的乘客更新信息，并记录更新时间
+            passenger.setUpdateTime(now);
+            passengerMapper.updateByPrimaryKey(passenger);
+        }
+
     }
+
 
     /**
      * 查询乘客信息列表
