@@ -63,6 +63,10 @@ public class PassengerService {
         }
 
         // 使用MyBatis分页插件进行分页查询，根据请求的页码和每页显示的条数进行设置
+
+        log.info("查询页码: {}", req.getPage());
+        log.info("查询每页显示的条数: {}", req.getSize());
+
         PageHelper.startPage(req.getPage(), req.getSize());
 
         // 执行查询操作，获取乘客信息列表
