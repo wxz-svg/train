@@ -61,6 +61,14 @@
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.wxz</groupId>
+            <artifactId>member</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- 项目构建配置，定义了项目构建时的详细设置 -->
