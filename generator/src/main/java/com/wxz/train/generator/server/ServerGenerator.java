@@ -18,6 +18,9 @@ import java.util.*;
  */
 public class ServerGenerator {
 
+    static boolean readOnly = false;
+    static String vuePath = "web/src/views/main/";
+
     // 目标文件路径，生成的Java文件将保存在此路径下
     static String servicePath = "[module]/src/main/java/com/wxz/train/[module]/";
 
@@ -97,13 +100,15 @@ public class ServerGenerator {
         params.put("tableNameCn", tableNameCn);
         params.put("typeSet", typeSet);
         params.put("fieldList", fieldList);
+        params.put("readOnly", readOnly);
         System.out.println("组装参数: " + params);
 
-        gen(Domain, params, "service", "service");
-        gen(Domain, params, "controller", "controller");
-        gen(Domain, params, "req", "saveReq");
-        gen(Domain, params,  "req","queryReq");
-        gen(Domain, params,  "resp","queryResp");
+//        gen(Domain, params, "service", "service");
+//        gen(Domain, params, "controller", "controller");
+//        gen(Domain, params, "req", "saveReq");
+//        gen(Domain, params,  "req","queryReq");
+//        gen(Domain, params,  "resp","queryResp");
+        genVue(do_main, params);
 
     }
 
@@ -130,6 +135,14 @@ public class ServerGenerator {
         // 输出开始生成的提示信息
         System.out.println("开始生成：" + fileName);
         // 使用模板生成Java文件
+        FreeMakerUtil.generator(fileName, param);
+    }
+
+    private static void genVue(String do_main, Map<String, Object> param) throws IOException, TemplateException {
+        FreeMakerUtil.initConfig("vue.ftl");
+        new File(vuePath).mkdirs();
+        String fileName = vuePath + do_main + ".vue";
+        System.out.println("开始生成：" + fileName);
         FreeMakerUtil.generator(fileName, param);
     }
 
