@@ -2,6 +2,7 @@ package com.wxz.train.member.controller;
 
 import com.wxz.train.common.context.LoginMemberContext;
 import com.wxz.train.common.resp.CommonResp;
+import com.wxz.train.common.resp.PageResp;
 import com.wxz.train.member.req.PassengerQueryReq;
 import com.wxz.train.member.req.PassengerSaveReq;
 import com.wxz.train.member.resp.PassengerQueryResp;
@@ -9,8 +10,6 @@ import com.wxz.train.member.service.PassengerService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/passenger")
@@ -36,9 +35,9 @@ public class PassengerController {
      * @return
      */
     @GetMapping("/query-list")
-    public CommonResp<List<PassengerQueryResp>> queryList(@Valid PassengerQueryReq req) {
+    public CommonResp<PageResp<PassengerQueryResp>> queryList(@Valid PassengerQueryReq req) {
         req.setMemberId(LoginMemberContext.getId());
-        List<PassengerQueryResp> list = passengerService.queryList(req);
+        PageResp<PassengerQueryResp> list = passengerService.queryList(req);
         return new CommonResp<>(list);
     }
 
