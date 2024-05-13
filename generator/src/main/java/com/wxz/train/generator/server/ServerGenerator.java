@@ -90,6 +90,7 @@ public class ServerGenerator {
 
         // 组装参数
         Map<String, Object> params = new HashMap<>();
+        params.put("module", module);
         params.put("Domain", Domain);
         params.put("domain", domain);
         params.put("do_main", do_main);
