@@ -44,7 +44,7 @@ public class ${Domain}Service {
         }
     }
 
-    public PageResp< ${Domain}QueryResp > queryList(${Domain}QueryReq req) {
+    public PageResp<${Domain}QueryResp> queryList(${Domain}QueryReq req) {
         ${Domain}Example ${domain}Example = new ${Domain}Example();
         ${domain}Example.setOrderByClause("id desc");
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
@@ -61,9 +61,9 @@ public class ${Domain}Service {
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
 
-        List<${Domain} QueryResp> list = BeanUtil.copyToList(${domain}List, ${Domain}QueryResp.class);
+        List<${Domain}QueryResp> list = BeanUtil.copyToList(${domain}List, ${Domain}QueryResp.class);
 
-        PageResp<${Domain} QueryResp> pageResp = new PageResp<>();
+        PageResp<${Domain}QueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;

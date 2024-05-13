@@ -25,7 +25,7 @@ public class FreeMakerUtil {
      * @param ftlName 模板文件的名称，不包含文件扩展名。此文件应位于配置中指定的目录下。
      * @throws Exception 如果在加载模板或配置模板过程中发生错误，则抛出异常。
      */
-    public static void initConfig(String ftlName) throws Exception {
+    public static void initConfig(String ftlName) throws IOException {
         // 创建并配置FreeMarker的Configuration实例
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_31);
         configuration.setDirectoryForTemplateLoading(new File(ftlPath)); // 设置模板加载目录
