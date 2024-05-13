@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wxz.train.common.context.LoginMemberContext;
 import com.wxz.train.common.resp.PageResp;
 import com.wxz.train.common.utils.SnowUtils;
 import com.wxz.train.${module}.domain.${Domain};
@@ -33,7 +32,6 @@ public class ${Domain}Service {
         DateTime now = DateTime.now();
         ${Domain} ${domain} = BeanUtil.copyProperties(req, ${Domain}.class);
         if (ObjectUtil.isNull(${domain}.getId())) {
-            ${domain}.setMemberId(LoginMemberContext.getId());
             ${domain}.setId(SnowUtils.getSnowflakeNextId());
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
@@ -48,9 +46,6 @@ public class ${Domain}Service {
         ${Domain}Example ${domain}Example = new ${Domain}Example();
         ${domain}Example.setOrderByClause("id desc");
         ${Domain}Example.Criteria criteria = ${domain}Example.createCriteria();
-        if (ObjectUtil.isNotNull(req.getMemberId())) {
-            criteria.andMemberIdEqualTo(req.getMemberId());
-        }
 
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());

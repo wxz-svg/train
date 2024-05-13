@@ -99,9 +99,12 @@ public class ServerGenerator {
         params.put("fieldList", fieldList);
         System.out.println("组装参数: " + params);
 
-        gen(Domain, params, "service");
-        gen(Domain, params, "controller");
-        gen(Domain, params, "saveReq");
+        gen(Domain, params, "service", "service");
+        gen(Domain, params, "controller", "controller");
+        gen(Domain, params, "req", "saveReq");
+        gen(Domain, params,  "req","queryReq");
+        gen(Domain, params,  "resp","queryResp");
+
     }
 
 
@@ -109,25 +112,27 @@ public class ServerGenerator {
      * 生成指定模板的Java文件。
      * @param Domain 生成文件中使用的域名。
      * @param param 用于模板生成的参数集合。
+     * @param packageName 目标Java文件所在的包名。
      * @param target 目标文件的基础名称。
      * @throws Exception 如果生成过程中发生错误，则抛出异常。
      */
-    private static void gen(String Domain, Map<String, Object> param, String target) throws IOException, TemplateException {
+    private static void gen(String Domain, Map<String, Object> param, String packageName, String target) throws IOException, TemplateException {
         // 初始化FreeMarker模板配置
         FreeMakerUtil.initConfig(target + ".ftl");
         // 构建目标文件路径
-        String toPath = servicePath + target + "/";
+        String toPath = servicePath + packageName + "/";
         // 创建目标文件夹
         new File(toPath).mkdirs();
-        // 生成目标类名
+        // 根据目标文件名生成Java类名
         String Target = target.substring(0, 1).toUpperCase() + target.substring(1);
-        // 拼接文件完整路径名
+        // 完整的文件名
         String fileName = toPath + Domain + Target + ".java";
-        // 输出开始生成的文件名
-        System.out.println("开始生成: " + fileName);
-        // 使用FreeMarker模板生成Java文件
+        // 输出开始生成的提示信息
+        System.out.println("开始生成：" + fileName);
+        // 使用模板生成Java文件
         FreeMakerUtil.generator(fileName, param);
     }
+
 
     /**
      * 获取生成器路径。
