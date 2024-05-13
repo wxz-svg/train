@@ -42,4 +42,15 @@ public class PassengerController {
     }
 
 
+    /**
+     * 删除乘客信息
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete/{id}")
+    public CommonResp<Object> delete(@PathVariable Long id) {
+        passengerService.delete(id);
+        return new CommonResp<>();
+    }
+
 }

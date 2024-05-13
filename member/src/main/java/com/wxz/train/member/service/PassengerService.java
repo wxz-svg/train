@@ -101,6 +101,12 @@ public class PassengerService {
         return pageResp;
     }
 
-
+    /**
+     * 根据id查询乘客信息
+     * @param id
+     */
+    public void delete(Long id){
+        passengerMapper.deleteByPrimaryKey(id);
+    }
 
 }
