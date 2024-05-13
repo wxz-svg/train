@@ -26,9 +26,14 @@ Content-Type: application/json
 token: {{token}}
 
 {
-  "name": "test",
-  "idCard": "123321",
+  "name": "wnknsa",
+  "idCard": "123327",
   "type": "1"
 }
+
+###
+GET http://localhost:8001/member/passenger/query-list
+Accept: application/json
+token: {{token}}
 
 ###

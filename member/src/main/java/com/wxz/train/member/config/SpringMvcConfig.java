@@ -1,8 +1,8 @@
-package com.wxz.train.common.config;
+package com.wxz.train.member.config;
 
 import com.wxz.train.common.interceptor.LogInterceptor;
 import com.wxz.train.common.interceptor.MemberInterceptor;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,10 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringMvcConfig implements WebMvcConfigurer {
 
     // 注入MemberInterceptor实例，用于后续的拦截器配置
-    @Resource
+    @Autowired
     private MemberInterceptor memberInterceptor;
 
-    @Resource
+    @Autowired
     private LogInterceptor logInterceptor;
 
     /**
