@@ -14,6 +14,8 @@ import 'ant-design-vue/dist/antd.css'; // 引入Ant Design Vue的样式文件
 import * as Icons from '@ant-design/icons-vue';
 import axios from "axios";
 import { notification} from "ant-design-vue";
+import './assets/js/enums'
+
 
 // 创建Vue应用实例
 const app = createApp(App)
