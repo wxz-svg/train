@@ -1,6 +1,5 @@
 package com.wxz.train.generator.server;
 
-import cn.hutool.json.JSONUtil;
 import com.wxz.train.generator.utils.DbUtils;
 import com.wxz.train.generator.utils.Field;
 import com.wxz.train.generator.utils.FreeMakerUtil;
@@ -12,9 +11,7 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 服务器代码生成器，利用FreeMarker模板生成指定名称的Java类。
@@ -86,8 +83,9 @@ public class ServerGenerator {
         // 表的中文名
         String tableNameCn = DbUtils.getTableComment(tableName.getText());
         List<Field> fieldList = DbUtils.getColumnByTableName(tableName.getText());
+        Set<String> typeSet = getJavaTypes(fieldList);
 
-        System.out.println("列信息：" + JSONUtil.toJsonPrettyStr(fieldList));
+        // System.out.println("列信息：" + JSONUtil.toJsonPrettyStr(fieldList));
 
 
         // 组装参数
@@ -95,10 +93,14 @@ public class ServerGenerator {
         params.put("Domain", Domain);
         params.put("domain", domain);
         params.put("do_main", do_main);
+        params.put("tableNameCn", tableNameCn);
+        params.put("typeSet", typeSet);
+        params.put("fieldList", fieldList);
         System.out.println("组装参数: " + params);
 
         gen(Domain, params, "service");
         gen(Domain, params, "controller");
+        gen(Domain, params, "saveReq");
     }
 
 
@@ -156,4 +158,22 @@ public class ServerGenerator {
         // 返回节点的文本内容
         return node.getText();
     }
+
+    /**
+     * 获取所有java类型，使用set去重
+     * 遍历字段列表，提取每个字段的Java类型，并通过Set集合去重，返回一个不重复的Java类型集合。
+     * @param fieldList 包含字段信息的列表，每个字段是一个Field对象。
+     * @return 返回一个Set集合，包含不重复的Java类型字符串。
+     */
+    public static Set<String> getJavaTypes(List<Field> fieldList) {
+        // 使用HashSet存储去重后的Java类型
+        Set<String> set = new HashSet<>();
+        // 遍历字段列表，获取每个字段的Java类型并添加到set中
+        for (int i = 0; i < fieldList.size(); i++) {
+            Field field = fieldList.get(i);
+            set.add(field.getJavaType());
+        }
+        return set;
+    }
+
 }

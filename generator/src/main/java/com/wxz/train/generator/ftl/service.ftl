@@ -34,7 +34,7 @@ public class ${Domain}Service {
         ${Domain} ${domain} = BeanUtil.copyProperties(req, ${Domain}.class);
         if (ObjectUtil.isNull(${domain}.getId())) {
             ${domain}.setMemberId(LoginMemberContext.getId());
-            ${domain}.setId(SnowUtil.getSnowflakeNextId());
+            ${domain}.setId(SnowUtils.getSnowflakeNextId());
             ${domain}.setCreateTime(now);
             ${domain}.setUpdateTime(now);
             ${domain}Mapper.insert(${domain});
