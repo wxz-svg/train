@@ -62,7 +62,7 @@ export default defineComponent({
     const router = useRouter();
     // 使用reactive创建一个响应式对象，用于存储登录表单的数据
     const loginForm = reactive({
-      mobile: '13000000000', // 默认手机号
+      mobile: '13000000001', // 默认手机号
       code: '', // 默认验证码
     });
 
