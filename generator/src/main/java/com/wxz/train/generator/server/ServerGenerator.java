@@ -1,6 +1,6 @@
 package com.wxz.train.generator.server;
 
-import freemarker.template.TemplateException;
+import com.wxz.train.generator.utils.FreeMakerUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
@@ -16,27 +16,34 @@ import java.util.Map;
 public class ServerGenerator {
 
     // 目标文件路径，生成的Java文件将保存在此路径下
-    static String toPath = "generator\\src\\main\\java\\com\\wxz\\train\\generator\\test\\";
+    static String servicePath = "[module]/src/main/java/com//wxz//train//[module]/service/";
 
     static String pomPath = "generator\\pom.xml";
 
     // 在类加载时创建目标路径下的文件夹，确保路径存在
     static {
-        new File(toPath).mkdirs();
+        new File(servicePath).mkdirs();
     }
 
     /**
-     * 程序入口点。
-     * 主要功能是使用SAXReader解析XML文件，定位并输出特定节点的文本内容。
-     * @param args 命令行参数，当前方法未使用此参数。
-     * @throws Exception 可能抛出的异常，包括TemplateException和其他IO异常。
-     * @throws TemplateException 当处理模板时发生错误。
+     * 主函数，用于执行代码生成的流程。
+     *
+     * @param args 命令行参数
+     * @throws Exception 可能抛出的异常，包括文件读写异常和XML解析异常等
      */
     public static void main(String[] args) throws Exception {
-        // 获取生成器路径
+        // 获取生成器路径-->mybatis-generator
         String generatorPath = getGeneratorPath();
 
-        // 使用SAXReader读取并解析XML文件
+        // 获取模块名称-->module,比如generator-config-member.xml,得到member
+        String module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
+        System.out.println("module: "+ module);
+
+        // 替换生成器路径中的模块名称
+        servicePath = servicePath.replace("[module]", module);
+        System.out.println("servicePath: "+ servicePath);
+
+        // 使用SAXReader读取并解析XML文件,读取table节点
         Document document = new SAXReader().read("generator/" + generatorPath);
 
         // 定位到table节点
@@ -49,6 +56,26 @@ public class ServerGenerator {
 
         // 输出属性值
         System.out.println(tableName.getText() + "/" + domainObjectName.getText());
+
+
+        // 示例：表名demo_test, 那么Domain = DemoTest
+        String Domain = domainObjectName.getText();
+        // domain = demoTest
+        String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
+        // do_main = demo_test
+        String do_main = domainObjectName.getText().replace("_", "-");
+
+        // 组装参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("Domain", Domain);
+        params.put("domain", domain);
+        params.put("do_main", do_main);
+        System.out.println("组装参数: " + params);
+
+        // 初始化模块配置，准备生成代码
+        FreeMakerUtil.initConfig("service.ftl");
+        // 根据模板和参数生成java文件
+        FreeMakerUtil.generator(servicePath + Domain + "Service.java", params);
     }
 
     /**
