@@ -28,7 +28,7 @@
            ok-text="确认" cancel-text="取消">
     <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
       <a-form-item label="车次编号">
-        <train-select-view v-model="trainStation.trainCode"></train-select-view>
+        <train-select-view v-model="trainStation.trainCode" width="50%"></train-select-view>
       </a-form-item>
       <a-form-item label="站序">
         <a-input v-model:value="trainStation.index" />
@@ -64,6 +64,7 @@ import TrainSelectView from "@/components/train-select";
 
 export default defineComponent({
   name: "train-station-view",
+  components: {TrainSelectView},
   setup() {
     const visible = ref(false);
     let trainStation = ref({
@@ -78,7 +79,6 @@ export default defineComponent({
       km: undefined,
       createTime: undefined,
       updateTime: undefined,
-      components: {TrainSelectView},
     });
     const trainStations = ref([]);
     // 分页的三个属性名是固定的
@@ -218,38 +218,11 @@ export default defineComponent({
       });
     };
 
-    // ----------------- 车次下拉框 -----------------
-    const trains = ref([]);
-
-    /**
-     * 查询所有的车次，用于车次下拉框
-     */
-    const queryTrainCode = () => {
-      axios.get("/business/admin/train/query-all").then((response) => {
-        let data = response.data;
-        if (data.success) {
-          trains.value = data.content;
-        } else {
-          notification.error({description: data.message});
-        }
-      });
-    };
-
-    /**
-     * 车次下拉框筛选
-     */
-    const filterTrainCodeOption = (input, option) => {
-      console.log(input, option);
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    };
-
     onMounted(() => {
       handleQuery({
         page: 1,
         size: pagination.value.pageSize
       });
-
-      queryTrainCode();
     });
 
     return {
@@ -265,8 +238,6 @@ export default defineComponent({
       handleOk,
       onEdit,
       onDelete,
-      filterTrainCodeOption,
-      trains
     };
   },
 });
