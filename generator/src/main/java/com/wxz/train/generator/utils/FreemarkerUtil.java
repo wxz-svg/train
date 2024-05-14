@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
-public class FreeMakerUtil {
+public class FreemarkerUtil {
 
     // 路径:ftl模板存放位置
     static String ftlPath = "generator\\src\\main\\java\\com\\wxz\\train\\generator\\ftl\\";
