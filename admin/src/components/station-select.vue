@@ -28,7 +28,7 @@ export default defineComponent({
     }
 
     // 利用watch，动态获取父组件的值，如果放在onMounted或其它方法里，则只有第一次有效
-    watch(() => props.modelValue, ()=>{
+    watch(() => props.modelValue, () => {
       console.log("props.modelValue", props.modelValue);
       trainCode.value = props.modelValue;
     }, {immediate: true});
@@ -37,7 +37,7 @@ export default defineComponent({
      * 查询所有的车次，用于车次下拉框
      */
     const queryAllTrain = () => {
-      axios.get("/business/admin/Train/query-all").then((response) => {
+      axios.get("/business/admin/train/query-all").then((response) => {
         let data = response.data;
         if (data.success) {
           trains.value = data.content;
