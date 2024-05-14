@@ -1,12 +1,12 @@
 package com.wxz.train.business.req;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.math.BigDecimal;
-
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class TrainStationSaveReq {
