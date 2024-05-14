@@ -13,34 +13,29 @@ public class TrainSaveReq {
     /**
      * id
      */
-
     private Long id;
 
     /**
      * 车次编号
      */
-
     @NotBlank(message = "【车次编号】不能为空")
     private String code;
 
     /**
      * 车次类型|枚举[TrainTypeEnum]
      */
-
     @NotBlank(message = "【车次类型】不能为空")
     private String type;
 
     /**
      * 始发站
      */
-
     @NotBlank(message = "【始发站】不能为空")
     private String start;
 
     /**
      * 始发站拼音
      */
-
     @NotBlank(message = "【始发站拼音】不能为空")
     private String startPinyin;
 
