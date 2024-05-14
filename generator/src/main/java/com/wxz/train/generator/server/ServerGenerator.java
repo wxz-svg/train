@@ -105,7 +105,8 @@ public class ServerGenerator {
         System.out.println("组装参数: " + params);
 
         gen(Domain, params, "service", "service");
-        gen(Domain, params, "controller", "controller");
+        // gen(Domain, params, "controller", "controller");
+        gen(Domain, params, "controller/admin", "adminController");
         gen(Domain, params, "req", "saveReq");
         gen(Domain, params,  "req","queryReq");
         gen(Domain, params,  "resp","queryResp");

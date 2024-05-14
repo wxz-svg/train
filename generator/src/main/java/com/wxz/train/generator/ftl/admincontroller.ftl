@@ -1,4 +1,4 @@
-package com.wxz.train.${module}.controller;
+package com.wxz.train.${module}.controller.admin;;
 
 import com.wxz.train.common.context.LoginMemberContext;
 import com.wxz.train.common.resp.CommonResp;
@@ -12,29 +12,27 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/${do_main}")
-public class ${Domain}Controller {
+@RequestMapping("/admin/${do_main}")
+public class ${Domain}AdminController {
 
     @Resource
     private ${Domain}Service ${domain}Service;
 
     @PostMapping("/save")
-    public CommonResp< Object > save(@Valid @RequestBody ${Domain}SaveReq req) {
+    public CommonResp<Object> save(@Valid @RequestBody ${Domain}SaveReq req) {
         ${domain}Service.save(req);
         return new CommonResp<>();
     }
 
     @GetMapping("/query-list")
     public CommonResp<PageResp<${Domain}QueryResp>> queryList(@Valid ${Domain}QueryReq req) {
-        req.setMemberId(LoginMemberContext.getId());
         PageResp<${Domain}QueryResp> list = ${domain}Service.queryList(req);
         return new CommonResp<>(list);
     }
 
     @DeleteMapping("/delete/{id}")
     public CommonResp<Object> delete(@PathVariable Long id) {
-        ${domain}Service.delete(id);
-        return new CommonResp<>();
+       ${domain}Service.delete(id);
+       return new CommonResp<>();
     }
-
 }
