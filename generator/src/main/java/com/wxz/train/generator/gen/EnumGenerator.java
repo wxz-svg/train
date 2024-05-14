@@ -1,6 +1,8 @@
 package com.wxz.train.generator.gen;
 
 import cn.hutool.core.util.StrUtil;
+import com.wxz.train.business.enums.SeatColEnum;
+import com.wxz.train.business.enums.SeatTypeEnum;
 import com.wxz.train.business.enums.TrainTypeEnum;
 import com.wxz.train.member.enums.PassengerTypeEnum;
 
@@ -23,6 +25,10 @@ public class EnumGenerator {
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
             // 将TrainTypeEnum类转换为JSON格式，分别存储在bufferObject和bufferArray中
             toJson(TrainTypeEnum.class, bufferObject, bufferArray);
+            // 将SeatColEnum类转换为JSON格式，分别存储在bufferObject和bufferArray中
+            toJson(SeatColEnum.class, bufferObject, bufferArray);
+            // 将SeatTypeEnum类转换为JSON格式，分别存储在bufferObject和bufferArray中
+            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
 
             // 将两个StringBuffer对象的内容合并，并存储在buffer中
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);

@@ -32,10 +32,21 @@
 
       <a-menu-item key="/train_station">
         <router-link to="/train_station">
-          <user-outlined /> &nbsp; 火车管理
+          <user-outlined /> &nbsp; 火车车站管理
         </router-link>
       </a-menu-item>
 
+      <a-menu-item key="/train_carriage">
+        <router-link to="/train_station">
+          <user-outlined /> &nbsp; 火车车厢管理
+        </router-link>
+      </a-menu-item>
+
+      <a-menu-item key="/train_seat">
+        <router-link to="/train_seat">
+          <user-outlined /> &nbsp; 火车座位管理
+        </router-link>
+      </a-menu-item>
 
     </a-menu>
   </a-layout-sider>
