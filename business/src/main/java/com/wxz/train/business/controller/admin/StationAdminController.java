@@ -10,6 +10,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/admin/Station")
@@ -39,6 +41,13 @@ public class StationAdminController {
         PageResp<StationQueryResp> list = stationService.queryList(req); // 调用服务查询车站信息列表
         return new CommonResp<>(list); // 返回查询结果
     }
+
+    @GetMapping("/query-all")
+    public CommonResp<List<StationQueryResp>> queryList() {
+        List<StationQueryResp> list = stationService.queryAll();
+        return new CommonResp<>(list);
+    }
+
 
     /**
      * 根据ID删除车站信息
