@@ -27,9 +27,16 @@
     <a-modal v-model:visible="visible" title="火车车站" @ok="handleOk"
              ok-text="确认" cancel-text="取消">
       <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+
             <a-form-item label="车次编号">
-                <a-input v-model:value="trainStation.trainCode" />
+              <a-select v-model:value="trainStation.trainCode" show-search
+                        :filterOption="filterTrainCodeOption">
+                <a-select-option v-for="item in trains" :key="item.code" :value="item.code" :label="item.code + item.start + item.end">
+                  {{ item.code }} | {{ item.start }} ~ {{ item.end }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
+
             <a-form-item label="站序">
                 <a-input v-model:value="trainStation.index" />
             </a-form-item>
@@ -219,16 +226,6 @@ import {pinyin} from "pinyin-pro";
         });
       };
 
-      const queryTrainCode = () => {
-        axios.get("/business/admin/train/query-all").then((response) => {
-          let data = response.data;
-          if (data.success) {
-            console.log(data.content);
-          } else {
-            notification.error({description: data.message});
-          }
-        });
-      };
 
       onMounted(() => {
         handleQuery({
@@ -237,6 +234,31 @@ import {pinyin} from "pinyin-pro";
         });
         queryTrainCode();
       });
+
+
+      const trains = ref([]);
+
+      /**
+       * 查询所有车次，用来车次下拉框
+       */
+      const queryTrainCode = () => {
+        axios.get("/business/admin/Train/query-all").then((response) => {
+          let data = response.data;
+          if (data.success) {
+            trains.value = data.content;
+          } else {
+            notification.error({description: data.message});
+          }
+        });
+      };
+
+      /**
+       * 车次下拉框筛选
+       */
+      const filterTrainCodeOption = (input, option) => {
+        console.log(input, option);
+        return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+      };
 
       return {
         trainStation,
@@ -250,7 +272,10 @@ import {pinyin} from "pinyin-pro";
         onAdd,
         handleOk,
         onEdit,
-        onDelete
+        onDelete,
+        trains,
+        queryTrainCode,
+        filterTrainCodeOption
       };
     },
   });
