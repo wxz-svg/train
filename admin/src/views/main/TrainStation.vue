@@ -5,7 +5,7 @@
       <a-button type="primary" @click="onAdd">新增</a-button>
     </a-space>
   </p>
-  <a-table :dataSource="trains"
+  <a-table :dataSource="trainStations"
            :columns="columns"
            :pagination="pagination"
            @change="handleTableChange"
@@ -22,45 +22,34 @@
             <a @click="onEdit(record)">编辑</a>
           </a-space>
       </template>
-          <template v-else-if="column.dataIndex === 'type'">
-          <span v-for="item in TRAIN_TYPE_ARRAY" :key="item.code">
-            <span v-if="item.code === record.type">
-              {{item.desc}}
-            </span>
-          </span>
-          </template>
     </template>
   </a-table>
-    <a-modal v-model:visible="visible" title="车次" @ok="handleOk"
+    <a-modal v-model:visible="visible" title="火车车站" @ok="handleOk"
              ok-text="确认" cancel-text="取消">
-      <a-form :model="train" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
+      <a-form :model="trainStation" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
             <a-form-item label="车次编号">
-                <a-input v-model:value="train.code" />
+                <a-input v-model:value="trainStation.trainCode" />
             </a-form-item>
-            <a-form-item label="车次类型">
-                <a-select v-model:value="train.type">
-                  <a-select-option v-for="item in TRAIN_TYPE_ARRAY" :key="item.code" :value="item.code">
-                    {{item.desc}}
-                  </a-select-option>
-                </a-select>
+            <a-form-item label="站序">
+                <a-input v-model:value="trainStation.index" />
             </a-form-item>
-            <a-form-item label="始发站">
-                <a-input v-model:value="train.start" />
+            <a-form-item label="站名">
+                <a-input v-model:value="trainStation.name" />
             </a-form-item>
-            <a-form-item label="始发站拼音">
-                <a-input v-model:value="train.startPinyin" />
+            <a-form-item label="站名拼音">
+                <a-input v-model:value="trainStation.namePinyin" />
             </a-form-item>
-            <a-form-item label="出发时间">
-                  <a-time-picker v-model:value="train.startTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+            <a-form-item label="进站时间">
+                  <a-time-picker v-model:value="trainStation.inTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
             </a-form-item>
-            <a-form-item label="终点站">
-                <a-input v-model:value="train.end" />
+            <a-form-item label="出站时间">
+                  <a-time-picker v-model:value="trainStation.outTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
             </a-form-item>
-            <a-form-item label="终点站拼音">
-                <a-input v-model:value="train.endPinyin" />
+            <a-form-item label="停站时长">
+                  <a-time-picker v-model:value="trainStation.stopTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
             </a-form-item>
-            <a-form-item label="到站时间">
-                  <a-time-picker v-model:value="train.endTime" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+            <a-form-item label="里程（公里）">
+                <a-input v-model:value="trainStation.km" />
             </a-form-item>
       </a-form>
     </a-modal>
@@ -72,24 +61,23 @@
   import axios from "axios";
 
   export default defineComponent({
-    name: "Train-view",
+    name: "TrainStation-view",
     setup() {
-      const TRAIN_TYPE_ARRAY = window.TRAIN_TYPE_ARRAY;
       const visible = ref(false);
-      let train = ref({
+      let trainStation = ref({
         id: undefined,
-        code: undefined,
-        type: undefined,
-        start: undefined,
-        startPinyin: undefined,
-        startTime: undefined,
-        end: undefined,
-        endPinyin: undefined,
-        endTime: undefined,
+        trainCode: undefined,
+        index: undefined,
+        name: undefined,
+        namePinyin: undefined,
+        inTime: undefined,
+        outTime: undefined,
+        stopTime: undefined,
+        km: undefined,
         createTime: undefined,
         updateTime: undefined,
       });
-      const trains = ref([]);
+      const trainStations = ref([]);
       // 分页的三个属性名是固定的
       const pagination = ref({
         total: 0,
@@ -100,43 +88,43 @@
       const columns = [
         {
           title: '车次编号',
-          dataIndex: 'code',
-          key: 'code',
+          dataIndex: 'trainCode',
+          key: 'trainCode',
         },
         {
-          title: '车次类型',
-          dataIndex: 'type',
-          key: 'type',
+          title: '站序',
+          dataIndex: 'index',
+          key: 'index',
         },
         {
-          title: '始发站',
-          dataIndex: 'start',
-          key: 'start',
+          title: '站名',
+          dataIndex: 'name',
+          key: 'name',
         },
         {
-          title: '始发站拼音',
-          dataIndex: 'startPinyin',
-          key: 'startPinyin',
+          title: '站名拼音',
+          dataIndex: 'namePinyin',
+          key: 'namePinyin',
         },
         {
-          title: '出发时间',
-          dataIndex: 'startTime',
-          key: 'startTime',
+          title: '进站时间',
+          dataIndex: 'inTime',
+          key: 'inTime',
         },
         {
-          title: '终点站',
-          dataIndex: 'end',
-          key: 'end',
+          title: '出站时间',
+          dataIndex: 'outTime',
+          key: 'outTime',
         },
         {
-          title: '终点站拼音',
-          dataIndex: 'endPinyin',
-          key: 'endPinyin',
+          title: '停站时长',
+          dataIndex: 'stopTime',
+          key: 'stopTime',
         },
         {
-          title: '到站时间',
-          dataIndex: 'endTime',
-          key: 'endTime',
+          title: '里程（公里）',
+          dataIndex: 'km',
+          key: 'km',
         },
         {
           title: '操作',
@@ -145,17 +133,17 @@
       ];
 
       const onAdd = () => {
-        train.value = {};
+        trainStation.value = {};
         visible.value = true;
       };
 
       const onEdit = (record) => {
-        train.value = window.Tool.copy(record);
+        trainStation.value = window.Tool.copy(record);
         visible.value = true;
       };
 
       const onDelete = (record) => {
-        axios.delete("/business/admin/Train/delete/" + record.id).then((response) => {
+        axios.delete("/business/admin/TrainStation/delete/" + record.id).then((response) => {
           const data = response.data;
           if (data.success) {
             notification.success({description: "删除成功！"});
@@ -170,7 +158,7 @@
       };
 
       const handleOk = () => {
-        axios.post("/business/admin/Train/save", train.value).then((response) => {
+        axios.post("/business/admin/TrainStation/save", trainStation.value).then((response) => {
           let data = response.data;
           if (data.success) {
             notification.success({description: "保存成功！"});
@@ -193,7 +181,7 @@
           };
         }
         loading.value = true;
-        axios.get("/business/admin/Train/query-list", {
+        axios.get("/business/admin/TrainStation/query-list", {
           params: {
             page: param.page,
             size: param.size
@@ -202,7 +190,7 @@
           loading.value = false;
           let data = response.data;
           if (data.success) {
-            trains.value = data.content.list;
+            trainStations.value = data.content.list;
             // 设置分页控件的值
             pagination.value.current = param.page;
             pagination.value.total = data.content.total;
@@ -228,10 +216,9 @@
       });
 
       return {
-        TRAIN_TYPE_ARRAY,
-        train,
+        trainStation,
         visible,
-        trains,
+        trainStations,
         pagination,
         columns,
         handleTableChange,

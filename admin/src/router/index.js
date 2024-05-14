@@ -13,8 +13,11 @@ const routes = [{
     path: 'station',
     component: () => import('../views/main/Station.vue'),
   }, {
-    path: 'station',
+    path: 'train',
     component: () => import('../views/main/Train.vue'),
+  }, {
+    path: 'train_station',
+    component: () => import('../views/main/TrainStation.vue'),
   }]
 }, {
   path: '',

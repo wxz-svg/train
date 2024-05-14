@@ -192,25 +192,27 @@ public class DbUtils {
      * @return 对应的Java数据类型，例如：String、Date、Long、Integer、BigDecimal、Boolean等。
      */
     public static String sqlTypeToJavaType(String sqlType) {
-        // 处理字符串类型，包括varchar、char、text
         if (sqlType.toUpperCase().contains("varchar".toUpperCase())
                 || sqlType.toUpperCase().contains("char".toUpperCase())
                 || sqlType.toUpperCase().contains("text".toUpperCase())) {
             return "String";
-        } else if (sqlType.toUpperCase().contains("datetime".toUpperCase())) { // 处理日期时间类型
+        } else if (sqlType.toUpperCase().contains("datetime".toUpperCase())) {
             return "Date";
-        } else if (sqlType.toUpperCase().contains("bigint".toUpperCase())) { // 处理大整数类型
+        } else if (sqlType.toUpperCase().contains("time".toUpperCase())) {
+            return "Date";
+        } else if (sqlType.toUpperCase().contains("date".toUpperCase())) {
+            return "Date";
+        } else if (sqlType.toUpperCase().contains("bigint".toUpperCase())) {
             return "Long";
-        } else if (sqlType.toUpperCase().contains("int".toUpperCase())) { // 处理整数类型
+        } else if (sqlType.toUpperCase().contains("int".toUpperCase())) {
             return "Integer";
-        } else if (sqlType.toUpperCase().contains("long".toUpperCase())) { // 处理长整数类型
+        } else if (sqlType.toUpperCase().contains("long".toUpperCase())) {
             return "Long";
-        } else if (sqlType.toUpperCase().contains("decimal".toUpperCase())) { // 处理十进制数类型
+        } else if (sqlType.toUpperCase().contains("decimal".toUpperCase())) {
             return "BigDecimal";
-        } else if (sqlType.toUpperCase().contains("boolean".toUpperCase())) { // 处理布尔类型
+        } else if (sqlType.toUpperCase().contains("boolean".toUpperCase())) {
             return "Boolean";
         } else {
-            // 对于未明确处理的其他类型，默认返回String
             return "String";
         }
     }
