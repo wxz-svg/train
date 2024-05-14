@@ -1,6 +1,7 @@
 package com.wxz.train.generator.gen;
 
 import cn.hutool.core.util.StrUtil;
+import com.wxz.train.business.enums.TrainTypeEnum;
 import com.wxz.train.member.enums.PassengerTypeEnum;
 
 import java.io.FileOutputStream;
@@ -8,7 +9,8 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 
 public class EnumGenerator {
-    static String path = "web/src/assets/js/enums.js";
+    //static String path = "web/src/assets/js/enums.js";
+    static String path = "admin/src/assets/js/enums.js";
 
     public static void main(String[] args) {
         // 初始化用于存储转换结果的StringBuffer对象
@@ -19,6 +21,8 @@ public class EnumGenerator {
         try {
             // 将PassengerTypeEnum类转换为JSON格式，分别存储在bufferObject和bufferArray中
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
+            // 将TrainTypeEnum类转换为JSON格式，分别存储在bufferObject和bufferArray中
+            toJson(TrainTypeEnum.class, bufferObject, bufferArray);
 
             // 将两个StringBuffer对象的内容合并，并存储在buffer中
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);

@@ -1,6 +1,5 @@
 package com.wxz.train.${module}.req;
 
-
 <#list typeSet as type>
 <#if type=='Date'>
 import java.util.Date;
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 </#list>
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 
 @Data
