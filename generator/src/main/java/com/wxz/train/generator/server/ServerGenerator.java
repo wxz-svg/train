@@ -19,7 +19,8 @@ import java.util.*;
 public class ServerGenerator {
 
     static boolean readOnly = false;
-    static String vuePath = "web/src/views/main/";
+    /*static String vuePath = "web/src/views/main/";*/
+    static String vuePath = "admin/src/views/main/";
 
     // 目标文件路径，生成的Java文件将保存在此路径下
     static String servicePath = "[module]/src/main/java/com/wxz/train/[module]/";
@@ -103,11 +104,11 @@ public class ServerGenerator {
         params.put("readOnly", readOnly);
         System.out.println("组装参数: " + params);
 
-//        gen(Domain, params, "service", "service");
-//        gen(Domain, params, "controller", "controller");
-//        gen(Domain, params, "req", "saveReq");
-//        gen(Domain, params,  "req","queryReq");
-//        gen(Domain, params,  "resp","queryResp");
+        gen(Domain, params, "service", "service");
+        gen(Domain, params, "controller", "controller");
+        gen(Domain, params, "req", "saveReq");
+        gen(Domain, params,  "req","queryReq");
+        gen(Domain, params,  "resp","queryResp");
         genVue(do_main, params);
 
     }
