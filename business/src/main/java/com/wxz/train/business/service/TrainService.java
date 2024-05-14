@@ -1,18 +1,21 @@
 package com.wxz.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wxz.train.common.resp.PageResp;
-import com.wxz.train.common.utils.SnowUtils;
 import com.wxz.train.business.domain.Train;
 import com.wxz.train.business.domain.TrainExample;
 import com.wxz.train.business.mapper.TrainMapper;
 import com.wxz.train.business.req.TrainQueryReq;
 import com.wxz.train.business.req.TrainSaveReq;
 import com.wxz.train.business.resp.TrainQueryResp;
+import com.wxz.train.common.enums.BusinessExceptionEnum;
+import com.wxz.train.common.exception.BusinessException;
+import com.wxz.train.common.resp.PageResp;
+import com.wxz.train.common.utils.SnowUtils;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +35,33 @@ public class TrainService {
         DateTime now = DateTime.now();
         Train train = BeanUtil.copyProperties(req, Train.class);
         if (ObjectUtil.isNull(train.getId())) {
+
+            // 保存之前，先校验唯一键是否存在
+            Train trainDB = selectByUnique(req.getCode());
+            if (ObjectUtil.isNotEmpty(trainDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_CODE_UNIQUE_ERROR);
+            }
+
             train.setId(SnowUtils.getSnowflakeNextId());
             train.setCreateTime(now);
             train.setUpdateTime(now);
             trainMapper.insert(train);
-            } else {
+        } else {
             train.setUpdateTime(now);
             trainMapper.updateByPrimaryKey(train);
         }
     }
 
-    public List<TrainQueryResp> queryAll() {
+    private Train selectByUnique(String code) {
         TrainExample trainExample = new TrainExample();
-        trainExample.setOrderByClause("code desc");
-        List<Train> trainList = trainMapper.selectByExample(trainExample);
-        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
+        trainExample.createCriteria()
+                .andCodeEqualTo(code);
+        List<Train> list = trainMapper.selectByExample(trainExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 
     public PageResp<TrainQueryResp> queryList(TrainQueryReq req) {
@@ -73,5 +88,12 @@ public class TrainService {
 
     public void delete(Long id) {
         trainMapper.deleteByPrimaryKey(id);
+    }
+
+    public List<TrainQueryResp> queryAll() {
+        TrainExample trainExample = new TrainExample();
+        trainExample.setOrderByClause("code asc");
+        List<Train> trainList = trainMapper.selectByExample(trainExample);
+        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
     }
 }

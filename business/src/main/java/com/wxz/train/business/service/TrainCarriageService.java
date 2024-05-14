@@ -1,6 +1,7 @@
 package com.wxz.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +13,8 @@ import com.wxz.train.business.mapper.TrainCarriageMapper;
 import com.wxz.train.business.req.TrainCarriageQueryReq;
 import com.wxz.train.business.req.TrainCarriageSaveReq;
 import com.wxz.train.business.resp.TrainCarriageQueryResp;
+import com.wxz.train.common.enums.BusinessExceptionEnum;
+import com.wxz.train.common.exception.BusinessException;
 import com.wxz.train.common.resp.PageResp;
 import com.wxz.train.common.utils.SnowUtils;
 import jakarta.annotation.Resource;
@@ -39,6 +42,13 @@ public class TrainCarriageService {
 
         TrainCarriage trainCarriage = BeanUtil.copyProperties(req, TrainCarriage.class);
         if (ObjectUtil.isNull(trainCarriage.getId())) {
+
+            // 保存之前，先校验唯一键是否存在
+            TrainCarriage trainCarriageDB = selectByUnique(req.getTrainCode(), req.getIndex());
+            if (ObjectUtil.isNotEmpty(trainCarriageDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_TRAIN_CARRIAGE_INDEX_UNIQUE_ERROR);
+            }
+
             trainCarriage.setId(SnowUtils.getSnowflakeNextId());
             trainCarriage.setCreateTime(now);
             trainCarriage.setUpdateTime(now);
@@ -46,6 +56,19 @@ public class TrainCarriageService {
         } else {
             trainCarriage.setUpdateTime(now);
             trainCarriageMapper.updateByPrimaryKey(trainCarriage);
+        }
+    }
+
+    private TrainCarriage selectByUnique(String trainCode, Integer index) {
+        TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
+        trainCarriageExample.createCriteria()
+                .andTrainCodeEqualTo(trainCode)
+                .andIndexEqualTo(index);
+        List<TrainCarriage> list = trainCarriageMapper.selectByExample(trainCarriageExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
         }
     }
 
@@ -74,15 +97,15 @@ public class TrainCarriageService {
         return pageResp;
     }
 
+    public void delete(Long id) {
+        trainCarriageMapper.deleteByPrimaryKey(id);
+    }
+
     public List<TrainCarriage> selectByTrainCode(String trainCode) {
         TrainCarriageExample trainCarriageExample = new TrainCarriageExample();
         trainCarriageExample.setOrderByClause("`index` asc");
         TrainCarriageExample.Criteria criteria = trainCarriageExample.createCriteria();
         criteria.andTrainCodeEqualTo(trainCode);
         return trainCarriageMapper.selectByExample(trainCarriageExample);
-    }
-
-    public void delete(Long id) {
-        trainCarriageMapper.deleteByPrimaryKey(id);
     }
 }
