@@ -1,18 +1,21 @@
 package com.wxz.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wxz.train.common.resp.PageResp;
-import com.wxz.train.common.utils.SnowUtils;
 import com.wxz.train.business.domain.Station;
 import com.wxz.train.business.domain.StationExample;
 import com.wxz.train.business.mapper.StationMapper;
 import com.wxz.train.business.req.StationQueryReq;
 import com.wxz.train.business.req.StationSaveReq;
 import com.wxz.train.business.resp.StationQueryResp;
+import com.wxz.train.common.enums.BusinessExceptionEnum;
+import com.wxz.train.common.exception.BusinessException;
+import com.wxz.train.common.resp.PageResp;
+import com.wxz.train.common.utils.SnowUtils;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +35,31 @@ public class StationService {
         DateTime now = DateTime.now();
         Station station = BeanUtil.copyProperties(req, Station.class);
         if (ObjectUtil.isNull(station.getId())) {
+
+            // 保存之前，先校验唯一键是否存在
+            Station stationDB = selectByUnique(req.getName());
+            if (ObjectUtil.isNotEmpty(stationDB)) {
+                throw new BusinessException(BusinessExceptionEnum.BUSINESS_STATION_NAME_UNIQUE_ERROR);
+            }
+
             station.setId(SnowUtils.getSnowflakeNextId());
             station.setCreateTime(now);
             station.setUpdateTime(now);
             stationMapper.insert(station);
-            } else {
+        } else {
             station.setUpdateTime(now);
             stationMapper.updateByPrimaryKey(station);
+        }
+    }
+
+    private Station selectByUnique(String name) {
+        StationExample stationExample = new StationExample();
+        stationExample.createCriteria().andNameEqualTo(name);
+        List<Station> list = stationMapper.selectByExample(stationExample);
+        if (CollUtil.isNotEmpty(list)) {
+            return list.get(0);
+        } else {
+            return null;
         }
     }
 
@@ -66,5 +87,12 @@ public class StationService {
 
     public void delete(Long id) {
         stationMapper.deleteByPrimaryKey(id);
+    }
+
+    public List<StationQueryResp> queryAll() {
+        StationExample stationExample = new StationExample();
+        stationExample.setOrderByClause("name_pinyin asc");
+        List<Station> stationList = stationMapper.selectByExample(stationExample);
+        return BeanUtil.copyToList(stationList, StationQueryResp.class);
     }
 }
