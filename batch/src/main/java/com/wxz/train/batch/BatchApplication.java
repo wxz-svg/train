@@ -1,20 +1,20 @@
-package com.wxz.train.business;
+package com.wxz.train.batch;
 
 import org.mybatis.spring.annotation.MapperScan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@MapperScan("com.wxz.train.business.mapper")
+@MapperScan("com.wxz.train.batch.mapper")
 @ComponentScan("com.wxz.train")
-public class BusinessApplication {
+public class BatchApplication {
 
     // 配置日志
-    private static final Logger log = LoggerFactory.getLogger(BusinessApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(BatchApplication.class);
 
     /**
      * 应用的入口方法
@@ -22,7 +22,7 @@ public class BusinessApplication {
      */
     public static void main(String[] args){
         // 初始化Spring Boot应用
-        SpringApplication application = new SpringApplication(BusinessApplication.class);
+        SpringApplication application = new SpringApplication(BatchApplication.class);
         // 运行应用，并获取环境变量
         Environment environment = application.run(args).getEnvironment();
         // 记录应用启动成功的日志
