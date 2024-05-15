@@ -1,6 +1,7 @@
 package com.wxz.train.generator.gen;
 
 import cn.hutool.core.util.StrUtil;
+import com.wxz.train.business.enums.TrainTypeEnum;
 import com.wxz.train.member.enums.PassengerTypeEnum;
 
 import java.io.FileOutputStream;
@@ -21,7 +22,7 @@ public class EnumGenerator {
         long begin = System.currentTimeMillis();
         try {
             toJson(PassengerTypeEnum.class, bufferObject, bufferArray);
-//            toJson(TrainTypeEnum.class, bufferObject, bufferArray);
+            toJson(TrainTypeEnum.class, bufferObject, bufferArray);
 //            toJson(SeatTypeEnum.class, bufferObject, bufferArray);
 //            toJson(SeatColEnum.class, bufferObject, bufferArray);
 
