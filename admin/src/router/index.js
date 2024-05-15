@@ -9,21 +9,6 @@ const routes = [{
   }, {
     path: 'about',
     component: () => import('../views/main/about.vue'),
-  }, {
-    path: 'station',
-    component: () => import('../views/main/business/station.vue'),
-  }, {
-    path: 'train',
-    component: () => import('../views/main/business/train.vue'),
-  }, {
-    path: 'train_station',
-    component: () => import('../views/main/business/train-station.vue'),
-  }, {
-    path: 'train_carriage',
-    component: () => import('../views/main/business/train-carriage.vue'),
-  }, {
-    path: 'train_seat',
-    component: () => import('../views/main/business/train-seat.vue'),
   }]
 }, {
   path: '',

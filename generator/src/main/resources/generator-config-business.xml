@@ -41,11 +41,11 @@
                              targetPackage="com.wxz.train.business.mapper"
                              type="XMLMAPPER"/>
 
-        <!--<table tableName="member" domainObjectName="Member"/>-->
-        <!--<table tableName="station" domainObjectName="Station"/>-->
+          <!--<table tableName="member" domainObjectName="Member"/>-->
+        <table tableName="station" domainObjectName="Station"/>
         <!--<table tableName="train" domainObjectName="Train"/>-->
         <!--<table tableName="train_station" domainObjectName="TrainStation"/>-->
         <!--<table tableName="train_carriage" domainObjectName="TrainCarriage"/>-->
-        <table tableName="train_seat" domainObjectName="TrainSeat"/>
+        <!--<table tableName="train_seat" domainObjectName="TrainSeat"/>-->
     </context>
 </generatorConfiguration>
