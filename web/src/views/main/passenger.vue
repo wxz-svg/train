@@ -122,7 +122,7 @@ export default defineComponent({
     };
 
     const onDelete = (record) => {
-      axios.delete("/member/Passenger/delete/" + record.id).then((response) => {
+      axios.delete("/member/passenger/delete/" + record.id).then((response) => {
         const data = response.data;
         if (data.success) {
           notification.success({description: "删除成功！"});

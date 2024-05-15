@@ -11,9 +11,9 @@ spring:
     name: business # 应用名称，用于标识和区分不同的Spring Boot应用
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver  # 数据库驱动类名，指定连接MySQL数据库所需的驱动类
-    url: jdbc:mysql://rm-uf62v90x7t5hukv5dro.mysql.rds.aliyuncs.com/train_business?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai # 数据库连接URL，包括数据库地址、端口、数据库名称等信息
-    username: train_business  # 数据库用户名，用于登录数据库
-    password: Business123  # 数据库密码，配合用户名使用以验证登录身份
+    url: jdbc:mysql://localhost:3306/train_business?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai # 数据库连接URL，包括数据库地址、端口、数据库名称等信息
+    username: root  # 数据库用户名，用于登录数据库
+    password: wxz123456  # 数据库密码，配合用户名使用以验证登录身份
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml  # 指定Mapper XML文件的位置，MyBatis根据此配置找到SQL映射文件进行SQL查询的定义
