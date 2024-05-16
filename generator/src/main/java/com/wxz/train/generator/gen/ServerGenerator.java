@@ -14,11 +14,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class ServerGenerator {
-    static boolean readOnly = false;
+    static boolean readOnly = true;
     //    static String vuePath = "web/src/views/main/";
     static String vuePath = "admin/src/views/main/";
     static String serverPath = "[module]/src/main/java/com/wxz/train/[module]/";
     static String pomPath = "generator\\pom.xml";
+    static String module = "";
     static {
         new File(serverPath).mkdirs();
     }
@@ -27,7 +28,7 @@ public class ServerGenerator {
         // 获取mybatis-generator
         String generatorPath = getGeneratorPath();
         // 比如generator-config-member.xml，得到module = member
-        String module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
+        module = generatorPath.replace("src/main/resources/generator-config-", "").replace(".xml", "");
         System.out.println("module: " + module);
         serverPath = serverPath.replace("[module]", module);
         // new File(servicePath).mkdirs();
@@ -97,8 +98,8 @@ public class ServerGenerator {
 
     private static void genVue(String do_main, Map<String, Object> param) throws IOException, TemplateException {
         FreemarkerUtil.initConfig("vue.ftl");
-        new File(vuePath).mkdirs();
-        String fileName = vuePath + do_main + ".vue";
+        new File(vuePath + module).mkdirs();
+        String fileName = vuePath + module + "/" + do_main + ".vue";
         System.out.println("开始生成：" + fileName);
         FreemarkerUtil.generator(fileName, param);
     }

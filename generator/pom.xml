@@ -69,8 +69,8 @@
                 <!-- 配置插件的具体设置，包括配置文件位置、是否覆盖已有文件及输出详细信息等 -->
                 <configuration>
                     <!--<configurationFile>src/main/resources/generator-config-member.xml</configurationFile>-->
-                    <!--<configurationFile>src/main/resources/generator-config-business.xml</configurationFile>-->
-                    <configurationFile>src/main/resources/generator-config-batch.xml</configurationFile>
+                    <configurationFile>src/main/resources/generator-config-business.xml</configurationFile>
+                   <!-- <configurationFile>src/main/resources/generator-config-batch.xml</configurationFile>-->
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                 </configuration>
