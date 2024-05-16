@@ -1,29 +1,30 @@
 package com.wxz.train.batch.resp;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Date;
 
+/**
+ * CronJobResp 类表示一个计划任务的响应信息。
+ * 它包含了任务的各个属性，如组名、任务名、描述、状态、CRON表达式以及下一次和上一次触发时间。
+ */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CronJobResp {
-    private String group;
-
-    private String name;
-
-    private String description;
-
-    private String state;
-
-    private String cronExpression;
-
+    private String group; // 任务组名
+    private String name; // 任务名
+    private String description; // 任务描述
+    private String state; // 任务状态
+    private String cronExpression; // CRON表达式，用于定义任务的执行时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date nextFireTime;
-
+    private Date nextFireTime; // 下一次触发时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date preFireTime;
+    private Date preFireTime; // 上一次触发时间
 
+    /**
+     * 生成并返回代表此CronJobResp对象的字符串。
+     * @return 表示此对象的字符串。
+     */
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("CronJobDto{");
@@ -37,6 +38,8 @@ public class CronJobResp {
         sb.append('}');
         return sb.toString();
     }
+
+    // Getter和Setter方法为字段提供读取和更新功能。
 
     public String getGroup() {
         return group;
