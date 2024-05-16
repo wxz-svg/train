@@ -191,6 +191,26 @@ public class JobController {
     }
 
     /**
+     * 手动执行指定的定时任务。
+     *
+     * @param cronJobReq 包含任务名称和组名的请求体，用于指定要执行的任务。
+     * @return 返回一个空的通用响应体，表示任务触发成功。
+     * @throws SchedulerException 如果触发任务时发生错误。
+     */
+    @RequestMapping(value = "/run")
+    public CommonResp<Object> run(@RequestBody CronJobReq cronJobReq) throws SchedulerException {
+        // 获取任务名称和组名
+        String jobClassName = cronJobReq.getName();
+        String jobGroupName = cronJobReq.getGroup();
+        // 记录任务开始执行的日志
+        LOG.info("手动执行任务开始：{}, {}", jobClassName, jobGroupName);
+        // 触发指定名称和组的任务
+        schedulerFactoryBean.getScheduler().triggerJob(JobKey.jobKey(jobClassName, jobGroupName));
+        return new CommonResp<>();
+    }
+
+
+    /**
      * 查询所有定时任务的信息。
      *
      * 该方法不接受任何参数，通过调用Quartz的Scheduler接口，从调度器中获取所有定时任务的详细信息，
