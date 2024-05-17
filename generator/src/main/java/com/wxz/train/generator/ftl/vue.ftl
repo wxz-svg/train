@@ -27,11 +27,11 @@
       <#list fieldList as field>
         <#if field.enums>
           <template v-else-if="column.dataIndex === '${field.nameHump}'">
-          <span v-for="item in ${field.enumsConst}_ARRAY" :key="item.code">
-            <span v-if="item.code === record.${field.nameHump}">
-              {{item.desc}}
-            </span>
+        <span v-for="item in ${field.enumsConst}_ARRAY" :key="item.code">
+          <span v-if="item.code === record.${field.nameHump}">
+            {{item.desc}}
           </span>
+        </span>
           </template>
         </#if>
       </#list>
@@ -184,11 +184,12 @@
         });
       };
 
-      const handleTableChange = (pagination) => {
-        // console.log("看看自带的分页参数都有啥：" + pagination);
+      const handleTableChange = (page) => {
+        // console.log("看看自带的分页参数都有啥：" + JSON.stringify(page));
+        pagination.value.pageSize = page.pageSize;
         handleQuery({
-          page: pagination.current,
-          size: pagination.pageSize
+          page: page.current,
+          size: page.pageSize
         });
       };
 

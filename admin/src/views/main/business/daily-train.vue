@@ -3,7 +3,7 @@
     <a-space>
       <a-date-picker v-model:value="params.date" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
       <train-select-view v-model="params.code" width="200px"></train-select-view>
-      <a-button type="primary" @click="handleQuery()">查找</a-button>
+      <a-button type="primary" @click="handleQuery()">查询</a-button>
       <a-button type="primary" @click="onAdd">新增</a-button>
       <a-button type="danger" @click="onClickGenDaily">手动生成车次信息</a-button>
     </a-space>
@@ -71,7 +71,7 @@
     </a-form>
   </a-modal>
   <a-modal v-model:visible="genDailyVisible" title="生成车次" @ok="handleGenDailyOk"
-           ok-text="确认" cancel-text="取消">
+           :confirm-loading="genDailyLoading" ok-text="确认" cancel-text="取消">
     <a-form :model="genDaily" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
       <a-form-item label="日期">
         <a-date-picker v-model:value="genDaily.date" placeholder="请选择日期"/>
@@ -122,6 +122,7 @@ export default defineComponent({
       date: null
     });
     const genDailyVisible = ref(false);
+    const genDailyLoading = ref(false);
     const columns = [
       {
         title: '日期',
@@ -266,11 +267,13 @@ export default defineComponent({
 
     const handleGenDailyOk = () => {
       let date = dayjs(genDaily.value.date).format("YYYY-MM-DD");
+      genDailyLoading.value = true;
       axios.get("/business/admin/daily-train/gen-daily/" + date).then((response) => {
+        genDailyLoading.value = false;
         let data = response.data;
         if (data.success) {
           notification.success({description: "生成成功！"});
-          visible.value = false;
+          genDailyVisible.value = false;
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize
@@ -307,7 +310,8 @@ export default defineComponent({
       genDaily,
       genDailyVisible,
       handleGenDailyOk,
-      onClickGenDaily
+      onClickGenDaily,
+      genDailyLoading
     };
   },
 });

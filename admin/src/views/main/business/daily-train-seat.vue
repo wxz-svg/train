@@ -53,6 +53,7 @@ export default defineComponent({
       col: undefined,
       seatType: undefined,
       carriageSeatIndex: undefined,
+      sell: undefined,
       createTime: undefined,
       updateTime: undefined,
     });
@@ -79,7 +80,7 @@ export default defineComponent({
         key: 'trainCode',
       },
       {
-        title: '厢序',
+        title: '箱序',
         dataIndex: 'carriageIndex',
         key: 'carriageIndex',
       },
@@ -99,9 +100,14 @@ export default defineComponent({
         key: 'seatType',
       },
       {
-        title: '同车厢座序',
+        title: '同车箱座序',
         dataIndex: 'carriageSeatIndex',
         key: 'carriageSeatIndex',
+      },
+      {
+        title: '售卖情况',
+        dataIndex: 'sell',
+        key: 'sell',
       },
     ];
 
@@ -134,11 +140,12 @@ export default defineComponent({
       });
     };
 
-    const handleTableChange = (pagination) => {
-      // console.log("看看自带的分页参数都有啥：" + pagination);
+    const handleTableChange = (page) => {
+      // console.log("看看自带的分页参数都有啥：" + JSON.stringify(page));
+      pagination.value.pageSize = page.pageSize;
       handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
+        page: page.current,
+        size: page.pageSize
       });
     };
 

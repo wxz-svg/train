@@ -59,7 +59,7 @@ public class DailyTrainStationService {
     public PageResp<DailyTrainStationQueryResp> queryList(DailyTrainStationQueryReq req) {
         // 初始化查询条件
         DailyTrainStationExample dailyTrainStationExample = new DailyTrainStationExample();
-        dailyTrainStationExample.setOrderByClause("date desc, train_code asc, `index` asc");
+        dailyTrainStationExample.setOrderByClause("train_code asc, carriage_index asc, carriage_seat_index asc");
 
         // 根据请求参数设置查询条件
         DailyTrainStationExample.Criteria criteria = dailyTrainStationExample.createCriteria();
