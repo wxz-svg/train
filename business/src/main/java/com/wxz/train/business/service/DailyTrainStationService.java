@@ -43,9 +43,18 @@ public class DailyTrainStationService {
         }
     }
 
+    /**
+     * 查询每日列车车站信息列表
+     *
+     * @param req 包含查询条件、分页信息的请求对象
+     * @return 返回包含查询结果和总条数的分页响应对象
+     */
     public PageResp<DailyTrainStationQueryResp> queryList(DailyTrainStationQueryReq req) {
+        // 初始化查询条件
         DailyTrainStationExample dailyTrainStationExample = new DailyTrainStationExample();
         dailyTrainStationExample.setOrderByClause("date desc, train_code asc, `index` asc");
+
+        // 根据请求参数设置查询条件
         DailyTrainStationExample.Criteria criteria = dailyTrainStationExample.createCriteria();
         if (ObjUtil.isNotNull(req.getDate())) {
             criteria.andDateEqualTo(req.getDate());
@@ -54,22 +63,29 @@ public class DailyTrainStationService {
             criteria.andTrainCodeEqualTo(req.getTrainCode());
         }
 
+        // 记录查询的页码和每页条数
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
+
+        // 使用PageHelper进行分页查询
         PageHelper.startPage(req.getPage(), req.getSize());
         List<DailyTrainStation> dailyTrainStationList = dailyTrainStationMapper.selectByExample(dailyTrainStationExample);
 
+        // 计算分页信息
         PageInfo<DailyTrainStation> pageInfo = new PageInfo<>(dailyTrainStationList);
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
 
+        // 将查询结果转换为响应对象列表
         List<DailyTrainStationQueryResp> list = BeanUtil.copyToList(dailyTrainStationList, DailyTrainStationQueryResp.class);
 
+        // 构建分页响应对象
         PageResp<DailyTrainStationQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
     }
+
 
 
     public void delete(Long id) {
