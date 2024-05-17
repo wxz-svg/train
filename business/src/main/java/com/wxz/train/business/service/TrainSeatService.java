@@ -161,4 +161,24 @@ public class TrainSeatService {
         }
     }
 
+    /**
+     * 根据火车编码查询座位信息。
+     *
+     * @param trainCode 火车编码，用于查询特定火车的座位信息。
+     * @return 返回一个火车座位信息的列表，按座位ID升序排列。
+     */
+    public List<TrainSeat> selectByTrainCode(String trainCode) {
+        // 创建TrainSeatExample对象用于设定查询条件和排序方式
+        TrainSeatExample trainSeatExample = new TrainSeatExample();
+        trainSeatExample.setOrderByClause("`id` asc"); // 设定查询结果按座位ID升序排列
+
+        // 创建查询条件
+        TrainSeatExample.Criteria criteria = trainSeatExample.createCriteria();
+        criteria.andTrainCodeEqualTo(trainCode); // 设定查询条件为火车编码等于传入的trainCode
+
+        // 执行查询并返回结果
+        return trainSeatMapper.selectByExample(trainSeatExample);
+    }
+
+
 }
