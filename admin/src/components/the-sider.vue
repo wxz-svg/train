@@ -11,11 +11,13 @@
           <coffee-outlined /> &nbsp; 欢迎
         </router-link>
       </a-menu-item>
+
       <a-menu-item key="/about">
         <router-link to="/about">
           <user-outlined /> &nbsp; 关于
         </router-link>
       </a-menu-item>
+
       <a-sub-menu key="business">
         <template #title>
           <span>
@@ -23,12 +25,22 @@
             业务管理
           </span>
         </template>
+
         <a-menu-item key="/business/daily-train">
           <router-link to="/business/daily-train">
             <user-outlined /> &nbsp; 每日车次
           </router-link>
         </a-menu-item>
+
+        <a-menu-item key="/business/daily-train-station">
+          <router-link to="/business/daily-train-station">
+            <user-outlined /> &nbsp; 每日车站
+          </router-link>
+        </a-menu-item>
+
       </a-sub-menu>
+
+
       <a-sub-menu key="base">
         <template #title>
           <span>
