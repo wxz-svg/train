@@ -62,3 +62,10 @@ Content-Type: application/json
   "name": "com.wxz.train.batch.job.TestJob",
   "jobGroupName": "default"
 }
+
+###
+GET http://localhost:8000/batch/hello
+Accept: application/json
+
+###
+
