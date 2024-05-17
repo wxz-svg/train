@@ -28,6 +28,6 @@ public class BusinessApplication {
         // 记录应用启动成功的日志
         log.info("启动成功!");
         // 记录Member服务的访问地址
-        log.info("Member地址: \thttp://127.0.0.1:{}{}", environment.getProperty("server.port"),environment.getProperty("server.servlet.context-path"));
+        log.info("Business地址: \thttp://127.0.0.1:{}{}", environment.getProperty("server.port"),environment.getProperty("server.servlet.context-path"));
     }
 }

@@ -84,13 +84,13 @@ public class TrainService {
     }
 
     /**
-     * 查询培训列表
+     * 查询火车列表
      *
      * @param req 包含查询条件、分页信息的请求对象
      * @return 返回包含查询结果和总条数的分页响应对象
      */
     public PageResp<TrainQueryResp> queryList(TrainQueryReq req) {
-        // 创建培训实体例子并设置排序条件
+        // 创建火车实体例子并设置排序条件
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("id desc");
         TrainExample.Criteria criteria = trainExample.createCriteria();
@@ -121,27 +121,38 @@ public class TrainService {
 
 
     /**
-     * 根据ID删除训练记录
-     * @param id 训练记录的唯一标识符
+     * 根据ID删除火车记录
+     * @param id 火车记录的唯一标识符
      */
     public void delete(Long id) {
         trainMapper.deleteByPrimaryKey(id);
     }
 
     /**
-     * 查询所有训练记录
-     * @return 返回训练记录列表，列表中的每个元素都是TrainQueryResp类型的
+     * 查询所有火车记录
+     * 该方法不接受任何参数，调用后会查询数据库中所有的火车记录，并将这些记录转换为TrainQueryResp类型的列表返回。
+     *
+     * @return 返回火车记录列表，列表中的每个元素都是TrainQueryResp类型的。这个列表包含了数据库中所有的火车记录，记录的顺序按照火车编号（code）升序排列。
      */
     public List<TrainQueryResp> queryAll() {
-        // 创建TrainExample对象并设置排序条件
+        // 从数据库中查询所有火车记录
+        List<Train> trainList = selectAll();
+        // 将查询到的火车记录转换为TrainQueryResp类型的列表并返回
+        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
+    }
+
+    /**
+     * 从数据库中查询所有火车记录
+     * 该方法内部创建了一个TrainExample对象，并设置了查询条件为按照火车编号升序排序，然后调用trainMapper的selectByExample方法进行查询。
+     *
+     * @return 返回火车记录列表，列表中的每个元素都是Train类型，包含了数据库中所有的火车记录，记录的顺序按照火车编号（code）升序排列。
+     */
+    public List<Train> selectAll() {
+        // 创建查询条件，设置排序方式为火车编号升序
         TrainExample trainExample = new TrainExample();
         trainExample.setOrderByClause("code asc");
-
-        // 根据TrainExample查询所有训练记录
-        List<Train> trainList = trainMapper.selectByExample(trainExample);
-
-        // 将查询结果转换为TrainQueryResp类型列表并返回
-        return BeanUtil.copyToList(trainList, TrainQueryResp.class);
+        // 根据查询条件查询所有火车记录
+        return trainMapper.selectByExample(trainExample);
     }
 
 }
