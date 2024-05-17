@@ -155,6 +155,23 @@ public class TrainStationService {
         return pageResp;
     }
 
+    /**
+     * 根据火车编码查询火车站点信息。
+     *
+     * @param trainCode 火车的编码，用于查询对应的火车站点信息。
+     * @return 返回一个火车站点信息的列表，这些信息属于指定的火车编码。
+     */
+    public List<TrainStation> selectByTrainCode(String trainCode) {
+        // 创建查询条件实例并设置排序规则
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.setOrderByClause("`index` asc");
+
+        // 设置查询条件为指定的火车编码
+        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+
+        // 根据查询条件查询并返回所有符合条件的火车站点信息
+        return trainStationMapper.selectByExample(trainStationExample);
+    }
 
     public void delete(Long id) {
         trainStationMapper.deleteByPrimaryKey(id);

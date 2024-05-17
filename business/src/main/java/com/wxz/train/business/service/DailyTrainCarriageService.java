@@ -1,13 +1,16 @@
 package com.wxz.train.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wxz.train.business.domain.DailyTrainCarriage;
 import com.wxz.train.business.domain.DailyTrainCarriageExample;
+import com.wxz.train.business.domain.TrainCarriage;
 import com.wxz.train.business.enums.SeatColEnum;
 import com.wxz.train.business.mapper.DailyTrainCarriageMapper;
 import com.wxz.train.business.req.DailyTrainCarriageQueryReq;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +33,9 @@ public class DailyTrainCarriageService {
 
     @Resource
     private DailyTrainCarriageMapper dailyTrainCarriageMapper;
+
+    @Resource
+    private TrainCarriageService trainCarriageService;
 
     /**
      * 保存每日列车车厢信息
@@ -102,7 +109,43 @@ public class DailyTrainCarriageService {
         return pageResp;
     }
 
+    /**
+     * 生成指定日期和车次的车厢信息。
+     * 此方法首先会删除指定日期和车次的所有既有车厢信息，然后根据提供的车次代码，查询所有的车厢基础数据，
+     * 并为每个车厢在指定日期下生成新的车厢信息记录。
+     *
+     * @param date 指定的日期，用于生成车厢信息。
+     * @param trainCode 车次代码，用于查询车厢基础数据并生成相应的车厢信息。
+     */
+    public void genDaily(Date date, String trainCode) {
+        LOG.info("生成日期【{}】车次【{}】的车厢信息开始", DateUtil.formatDate(date), trainCode);
 
+        // 删除指定日期和车次的既有车厢信息
+        DailyTrainCarriageExample dailyTrainCarriageExample = new DailyTrainCarriageExample();
+        dailyTrainCarriageExample.createCriteria()
+                .andDateEqualTo(date)
+                .andTrainCodeEqualTo(trainCode);
+        dailyTrainCarriageMapper.deleteByExample(dailyTrainCarriageExample);
+
+        // 查询车次的所有车厢基础数据
+        List<TrainCarriage> carriageList = trainCarriageService.selectByTrainCode(trainCode);
+        if (CollUtil.isEmpty(carriageList)) {
+            LOG.info("该车次没有车厢基础数据，生成该车次的车厢信息结束");
+            return;
+        }
+
+        // 为每个车厢生成新的车厢信息记录
+        for (TrainCarriage trainCarriage : carriageList) {
+            DateTime now = DateTime.now();
+            DailyTrainCarriage dailyTrainCarriage = BeanUtil.copyProperties(trainCarriage, DailyTrainCarriage.class);
+            dailyTrainCarriage.setId(SnowUtils.getSnowflakeNextId());
+            dailyTrainCarriage.setCreateTime(now);
+            dailyTrainCarriage.setUpdateTime(now);
+            dailyTrainCarriage.setDate(date);
+            dailyTrainCarriageMapper.insert(dailyTrainCarriage);
+        }
+        LOG.info("生成日期【{}】车次【{}】的车厢信息结束", DateUtil.formatDate(date), trainCode);
+    }
     public void delete(Long id) {
         dailyTrainCarriageMapper.deleteByPrimaryKey(id);
     }
