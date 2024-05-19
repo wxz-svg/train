@@ -80,7 +80,7 @@ export default defineComponent({
         key: 'trainCode',
       },
       {
-        title: '箱序',
+        title: '厢序',
         dataIndex: 'carriageIndex',
         key: 'carriageIndex',
       },
@@ -100,7 +100,7 @@ export default defineComponent({
         key: 'seatType',
       },
       {
-        title: '同车箱座序',
+        title: '同车厢座序',
         dataIndex: 'carriageSeatIndex',
         key: 'carriageSeatIndex',
       },
